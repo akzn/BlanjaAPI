@@ -17,6 +17,15 @@ module.exports = {
     res.status(500).json(resObject);
   },
 
+  errorMidtrans: (res, err) => {
+    const resObject = {
+      status: err.httpStatusCode,
+      statusText: err.rawHttpClientData.statusText,
+      message: err.ApiResponse,
+    };
+    res.status(err.httpStatusCode).json(resObject);
+  },
+
   // Kategories response
   nested: (res, data) => {
     let productArray = data[1];

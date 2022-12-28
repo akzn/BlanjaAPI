@@ -16,6 +16,7 @@ const statusRouter = require("./status");
 const conditionRouter = require("./condition");
 const reviewRouter = require("./review");
 const chatRouter = require("./chat");
+const paymentRouter = require("./payment");
 
 mainRouter.use("/", welcomeRouter);
 mainRouter.use("/categories", categoriesRouter);
@@ -32,5 +33,6 @@ mainRouter.use("/status", statusRouter);
 mainRouter.use("/condition", conditionRouter);
 mainRouter.use("/chat", chatRouter);
 mainRouter.use("/review", reviewRouter);
+mainRouter.use("/payment", paymentRouter);
 
 module.exports = mainRouter;

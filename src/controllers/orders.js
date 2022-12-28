@@ -1,5 +1,8 @@
+
+
 const orderModel = require("../models/orders");
 const form = require("../helpers/form");
+const { ReqMidtransTransaction } = require("../helpers/midtrans");
 
 module.exports = {
   getAllOrdersHistory: (req, res) => {
@@ -27,7 +30,7 @@ module.exports = {
   getTransactionById: (req, res) => {
     const { id } = req.params;
     const user_id = req.decodedToken.id;
-
+  
     orderModel
       .getOrderById(id, user_id)
       .then((data) => {
@@ -42,16 +45,26 @@ module.exports = {
       });
   },
 
-  postOrders: (req, res) => {
+  postOrders: async (req, res) => {
     const { body } = req;
     const user_id = req.decodedToken.id;
     const level = req.decodedToken.level_id;
 
     orderModel
       .postOrders(body, level, user_id)
-      .then((data) => {
+      .then(async (data) => {
+
+        // request midtrans token
+        params = {
+          'transaction_code':body.transaction_code,
+          'total':data.total
+        }
+        // midtransTransaction = await ReqMidtransTransaction(params)
+        // console.log(midtransTransaction)
+
         const newResObj = {
           id: data.insertId,
+          // midtransData: midtransTransaction,
           ...body,
         };
         form.success(res, newResObj);

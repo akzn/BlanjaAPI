@@ -17,6 +17,7 @@ module.exports = {
     getAddressByUser: (user_id) => {
         return new Promise((resolve, reject) => {
             const queryString = "SELECT a.id_address, a.fullname, a.address, a.city, a.region, a.zip_code, a.country, u.id FROM address_customer AS a JOIN users AS u on u.id = a.id_user WHERE id_user = " + user_id;
+            console.log(db.query(queryString, user_id))
             db.query(queryString, user_id, (err, data) => {
                 if(!err) {
                     resolve(data)
