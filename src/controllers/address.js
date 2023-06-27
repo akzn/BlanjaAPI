@@ -163,6 +163,54 @@ module.exports = {
     .catch((err) => {
       form.error(res, err);
     })
-  }
+  },
+
+  setPrimaryAddress: (req, res) => {
+    console.log(req)
+    const { id } = req.params;
+    const user_id = req.decodedToken.id
+    addressModel.setPrimaryAddress(id, user_id)
+    .then((data) => {
+      if (data.affectedRows === 0) {
+        res.status(404).json({
+          msg: "Data not found",
+          status: 404,
+        })
+      } else {
+        const newResObj = {
+          msg: " Data updated",
+          status: 200,
+        }
+        res.json(newResObj);
+      }
+    })
+    .catch((err) => {
+      form.error(res, err);
+    })
+  },
+
+  setAddressInactive: (req, res) => {
+    const { id } = req.params;
+    const user_id = req.decodedToken.id
+    addressModel.setAddressInactive(id, user_id)
+    .then((data) => {
+      if (data.affectedRows === 0) {
+        res.status(404).json({
+          msg: "Data not found",
+          status: 404,
+        })
+      } else {
+        const newResObj = {
+          msg: " Data deleted",
+          status: 200,
+        }
+        res.json(newResObj);
+      }
+    })
+    .catch((err) => {
+      form.error(res, err);
+    })
+  },
+
 };
 

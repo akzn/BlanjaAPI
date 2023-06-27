@@ -336,6 +336,27 @@ module.exports = {
     });
   },
 
+  getProductAdmin: (user_id) => {
+    return new Promise((resolve, reject) => {
+      const queryString = [
+        `SELECT p.id, p.product_name, c.category_name, p.product_price, p.product_qty, p.product_desc, p.product_photo, p.user_id, IFNULL(AVG(rating),0) as rating FROM products as p
+        LEFT JOIN ratings ON p.id = ratings.product_id
+        INNER JOIN categories as c ON p.category_id = c.id_categories GROUP by p.id order by p.id desc`,
+        `SELECT * FROM product_sizes as ps INNER JOIN size as s ON s.id = ps.size_id`,
+        `SELECT * FROM product_colors as pc INNER JOIN colors as c ON c.id = pc.color_id`,
+        `SELECT product_id, AVG(rating) as rating FROM ratings GROUP BY product_id order by product_id desc`,
+      ];
+      db.query(queryString.join(";"), (err, data) => {
+        // console.log(data);
+        if (!err) {
+          resolve(data);
+        } else {
+          reject(err);
+        }
+      });
+    });
+  },
+
   filterProduct: (size, color, category) => {
     return new Promise((resolve, reject) => {
       const queryStringFilter = [

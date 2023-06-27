@@ -10,6 +10,10 @@ paymentRouter.get("/midtrans/token/:id",checkToken, paymentController.requestMid
 
 // update midtrans trx with new data
 paymentRouter.patch("/midtrans/", checkToken, paymentController.updateMidtrans);
+paymentRouter.patch("/midtrans/by-code", checkToken, paymentController.updateMidtransByCode);
+
+// getstatus
+paymentRouter.get("/midtrans/get-status/:id", checkToken, paymentController.getTransactionStatusByOrderCode);
 
 
 

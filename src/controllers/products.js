@@ -173,6 +173,20 @@ module.exports = {
       });
   },
 
+  getProductAdmin: (req, res) => {
+    const user_id = req.decodedToken.id;
+    productsModel
+      .getProductAdmin(user_id)
+      .then((data) => {
+        form.nestedProductByUserAdmin(res, data);
+        // form.nestedAllProduct(res, data[0],data[1]);
+      })
+      .catch((err) => {
+        form.error(res, err);
+        console.log(res,err)
+      });
+  },
+
   filterProduct: (req, res) => {
     const { category, size, color } = req.query;
 

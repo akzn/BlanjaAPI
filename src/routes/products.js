@@ -9,6 +9,7 @@ const uploadImg = require("../helpers/middlewares/upload");
 productsRouter.get("/", productsController.productAll);
 productsRouter.get("/filter", productsController.filterProduct);
 productsRouter.get("/user", checkToken, productsController.getProductByUserId);
+productsRouter.get("/admin", checkToken, productsController.getProductAdmin);
 productsRouter.get("/:id", productsController.getProductById);
 productsRouter.post("/", checkToken, uploadImage, productsController.postProduct);
 productsRouter.put("/:id", checkToken, uploadImage, productsController.editProduct);

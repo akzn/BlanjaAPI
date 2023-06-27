@@ -88,7 +88,7 @@ module.exports = {
     orderDetailArray.reduce((map, row) => {
       const key = row["order_id"];
       map[key];
-      console.log(map[key]);
+      // console.log(map[key]);
       if (map[key]) {
         if (!map[key].order_detail) map[key].order_detail = [];
         map[key].order_detail.push(row);
@@ -246,14 +246,71 @@ module.exports = {
     res.json(resObject);
   },
 
+  // admin get order detail
+  nestedAdminOrderDetail: (res, data) => {
+    let orderArray = data[0];
+    let orderDetailArray = data[1];
+    let userArray = data[2];
+    let paymentArray = data[3];
+
+    let orders = orderArray.reduce((map, row) => {
+      const key = row["id"];
+      console.log("order key = " + key);
+      map[key] = row;
+      return map;
+    }, {});
+
+    orderDetailArray.reduce((map, row) => {
+      const key = row["order_id"];
+      map[key];
+      if (map[key]) {
+        if (!map[key].order_detail) map[key].order_detail = [];
+        map[key].order_detail.push(row);
+      }
+
+      return map;
+    }, orders);
+    
+    userArray.reduce((map, row) => {
+      const key = row["order_id"];
+      map[key];
+      if (map[key]) {
+        if (!map[key].user) map[key].user = [];
+        map[key].user.push(row);
+      }
+
+      return map;
+    }, orders);
+
+    paymentArray.reduce((map, row) => {
+      const key = row["order_id"];
+      map[key];
+      if (map[key]) {
+        if (!map[key].payment) map[key].payment = [];
+        map[key].payment.push(row);
+      }
+
+      return map;
+    }, orders);
+
+    let result = Object.values(orders);
+
+    const resObject = {
+      message: "Data Success",
+      status: 200,
+      data: result[0],
+    };
+    res.json(resObject);
+  },
+
   //nested products
   nestedAllProduct: (res, data, keyword) => {
     let productArray = data.products[0];
-    // console.log(productArray);
+    // console.log('data',data);
     let sizeArray = data.products[1];
     let colorArray = data.products[2];
 
-    console.log();
+    // console.log();
 
     let products = productArray.reduce((map, row) => {
       // console.log(row.rating);
@@ -264,7 +321,7 @@ module.exports = {
       return map;
     }, {});
 
-    console.log(products);
+    // console.log(products);
 
     sizeArray.reduce((map, row) => {
       const key = row["product_id"];
@@ -382,19 +439,100 @@ module.exports = {
   },
 
   nestedProductByUser: (res, data) => {
+    try {
     let productArray = data[0];
     let sizeArray = data[1];
     let colorArray = data[2];
     let ratingArray = data[3];
 
-    let products = productArray.reduce((map, row) => {
-      const key = row["id"];
-      map[key] = row;
-      row.rating = 0;
-      row.sizes = [];
-      row.colors = [];
+    // let products = productArray.reduce((map, row) => {
+    //   const key = row["id"];
+    //   map[key] = row;
+    //   row.rating = 0;
+    //   row.sizes = [];
+    //   row.colors = [];
+    //   return map;
+    // }, {});
+
+    let products = productArray.map(row => {
+      return {
+        ...row,
+        rating: 0,
+        sizes: [],
+        colors: []
+      };
+    });
+
+    sizeArray.reduce((map, row) => {
+      const key = row["product_id"];
+      map[key];
+      if (map[key]) {
+        if (!map[key].sizes) map[key].sizes = [];
+        map[key].sizes.push(row);
+      }
       return map;
-    }, {});
+    }, products);
+
+    colorArray.reduce((map, row) => {
+      const key = row["product_id"];
+      map[key];
+      console.log('rat',map[key])
+
+      if (map[key]) {
+        if (!map[key].colors) map[key].colors = [];
+        map[key].colors.push(row);
+      }
+      return map;
+    }, products);
+
+    ratingArray.reduce((map, row) => {
+      const key = row["product_id"];
+      map[key];
+      if (map[key]) {
+        if (!map[key].rating) map[key].rating = 0;
+        map[key].rating = row["rating"];
+      }
+      return map;
+    }, products);
+
+    let result = Object.values(products);
+    // console.log('result',result)
+    const resObject = {
+      message: "Data Success",
+      status: 200,
+      data: result,
+    };
+
+    res.json(resObject);
+  } catch (error) {
+    console.error("An error occurred:", error);
+  }
+  },
+
+  nestedProductByUserAdmin: (res, data) => {
+    try {
+    let productArray = data[0];
+    let sizeArray = data[1];
+    let colorArray = data[2];
+    // let ratingArray = data[3];
+
+    // let products = productArray.reduce((map, row) => {
+    //   const key = row["id"];
+    //   map[key] = row;
+    //   row.rating = 0;
+    //   row.sizes = [];
+    //   row.colors = [];
+    //   return map;
+    // }, {});
+
+    let products = productArray.map(row => {
+      return {
+        ...row,
+        // rating: 0,
+        sizes: [],
+        colors: []
+      };
+    });
 
     sizeArray.reduce((map, row) => {
       const key = row["product_id"];
@@ -416,18 +554,18 @@ module.exports = {
       return map;
     }, products);
 
-    ratingArray.reduce((map, row) => {
-      const key = row["product_id"];
-      map[key];
-      if (map[key]) {
-        if (!map[key].rating) map[key].rating = 0;
-        map[key].rating = row["rating"];
-      }
-      return map;
-    }, products);
+    // ratingArray.reduce((map, row) => {
+    //   const key = row["product_id"];
+    //   map[key];
+    //   if (map[key]) {
+    //     if (!map[key].rating) map[key].rating = 0;
+    //     map[key].rating = row["rating"];
+    //   }
+    //   return map;
+    // }, products);
 
     let result = Object.values(products);
-
+    // console.log('result',result)
     const resObject = {
       message: "Data Success",
       status: 200,
@@ -435,6 +573,9 @@ module.exports = {
     };
 
     res.json(resObject);
+  } catch (error) {
+    console.error("An error occurred:", error);
+  }
   },
 
   nestedFilterProduct: (res, data) => {

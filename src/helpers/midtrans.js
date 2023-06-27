@@ -19,7 +19,44 @@ let snap = new midtransClient.Snap({
     clientKey : process.env.MIDTRANS_CLIENTKEY
 });
 
+const http = require('http');
+const fetch = require('node-fetch');
+const getTransactionStatus = async (transactionId) => {
+    const apiUrl = `https://api.sandbox.midtrans.com/v2/${transactionId}/status`;
+  
+    const response = await fetch(apiUrl, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic '+ Buffer.from(process.env.MIDTRANS_SERVERKEY).toString('base64')
+        // 'Authorization': 'Basic '+ process.env.MIDTRANS_SERVERKEY, // Replace with your Midtrans API key
+      },
+    });
+  
+    if (response.ok) {
+      const result = await response.json();
+        
+      console.log('success checking transaction status')
+      console.log('Status:', result.status_code);
+      console.log('Status Message:', result.status_message);
+
+        //   console.log('Payment Type:', result.payment_type);
+        //     console.log('Gross Amount:', result.gross_amount);
+
+      // Handle the response data as per your requirements
+      return result
+    } else {
+        console.log('Error occurred while checking transaction status:', response.status, response.statusText);
+        ret = {
+            status:response.status,
+            message:response.statusText
+        }
+        return ret
+      // Handle the error response
+    }
+};
+
 module.exports = {
+    getTransactionStatus,
     ReqMidtransTransaction: async (requests, response) => {
 
         // prepare Snap API parameter ( refer to: https://snap-docs.midtrans.com ) minimum parameter example:

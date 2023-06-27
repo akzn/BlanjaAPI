@@ -16,7 +16,7 @@ module.exports = {
       .getAllOrdersHistory(level, user_id)
       .then((data) => {
         form.nestedAll(res, data);
-        console.log(data);
+        // console.log(data);
       })
       .catch((error) => {
         res.status(500).send({
@@ -30,9 +30,30 @@ module.exports = {
   getTransactionById: (req, res) => {
     const { id } = req.params;
     const user_id = req.decodedToken.id;
-  
+    if (id == null || id == undefined){
+      return res.status(400).json({ error: 'id is null or undefined' });
+    }
     orderModel
       .getOrderById(id, user_id)
+      .then((data) => {
+        form.nestedOne(res, data);
+        console.log(data)
+      })
+      .catch((error) => {
+        res.status(500).send({
+          message: "failed",
+          status: false,
+          error: error,
+        });
+      });
+  },
+
+  getTransactionByCode: (req, res) => {
+    const { code } = req.params;
+    const user_id = req.decodedToken.id;
+  
+    orderModel
+      .getOrderByCode(code, user_id)
       .then((data) => {
         form.nestedOne(res, data);
       })
@@ -96,6 +117,25 @@ module.exports = {
       });
   },
 
+  getAllOrderHistoryAdmin: (req, res) => {
+    const user_id = req.decodedToken.id;
+    console.log(req.decodedToken);
+
+    orderModel
+      .getAllOrderHistoryAdmin(user_id)
+      .then((data) => {
+        form.nestedAll(res, data);
+        console.log(data);
+      })
+      .catch((error) => {
+        res.status(500).send({
+          message: "failed",
+          status: false,
+          error: error,
+        });
+      });
+  },
+
   getOrderHistorySellerById: (req, res) => {
     const user_id = req.decodedToken.id;
     const { id } = req.params;
@@ -104,6 +144,24 @@ module.exports = {
       .getOrderHistorySellerById(id, user_id)
       .then((data) => {
         form.nestedOne(res, data);
+      })
+      .catch((error) => {
+        res.status(500).send({
+          message: "failed",
+          status: false,
+          error: error,
+        });
+      });
+  },
+
+  getTransactionByIdforAdmin: (req, res) => {
+    const { id } = req.params;
+    const user_id = req.decodedToken.id;
+  
+    orderModel
+      .getOrderByIdforAdmin(id, user_id)
+      .then((data) => {
+        form.nestedAdminOrderDetail(res, data);
       })
       .catch((error) => {
         res.status(500).send({
