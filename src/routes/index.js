@@ -17,6 +17,7 @@ const conditionRouter = require("./condition");
 const reviewRouter = require("./review");
 const chatRouter = require("./chat");
 const paymentRouter = require("./payment");
+const shippingRouter = require("./shipping");
 
 mainRouter.use("/", welcomeRouter);
 mainRouter.use("/categories", categoriesRouter);
@@ -34,5 +35,6 @@ mainRouter.use("/condition", conditionRouter);
 mainRouter.use("/chat", chatRouter);
 mainRouter.use("/review", reviewRouter);
 mainRouter.use("/payment", paymentRouter);
+mainRouter.use("/shipping", shippingRouter);
 
 module.exports = mainRouter;

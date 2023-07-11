@@ -696,4 +696,22 @@ module.exports = {
     };
     res.json(resObject);
   },
+
+   // order Detail response
+   nestedShippingDataByCode: (res, data) => {
+    let order = data[0];
+    let customer_address = data[1];
+
+    data = {
+      'order' : order,
+      'customer_address' : customer_address,
+    }
+
+    const resObject = {
+      message: "Data Success",
+      status: 200,
+      data: data,
+    };
+    res.json(resObject);
+  },
 };

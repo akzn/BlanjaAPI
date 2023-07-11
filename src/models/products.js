@@ -25,7 +25,7 @@ module.exports = {
 
     return new Promise((resolve, reject) => {
       const queryString = [
-        `SELECT p.id, p.product_name, c.category_name, cd.conditions, p.product_price, p.product_qty, p.product_desc, p.product_photo, p.created_at,  IFNULL(AVG(rating),0) as rating, COUNT(review) as review FROM products as p
+        `SELECT p.weight_gram, p.id, p.product_name, c.category_name, cd.conditions, p.product_price, p.product_qty, p.product_desc, p.product_photo, p.created_at,  IFNULL(AVG(rating),0) as rating, COUNT(review) as review FROM products as p
         INNER JOIN categories as c ON p.category_id = c.id_categories
         INNER JOIN conditions as cd ON p.condition_id = cd.id
         LEFT JOIN ratings ON p.id = ratings.product_id
@@ -71,7 +71,7 @@ module.exports = {
   getProductById: (params) => {
     return new Promise((resolve, reject) => {
       const queryString = [
-        `SELECT p.id, p.product_name, c.category_name, p.product_price, p.product_qty, p.product_desc, p.product_photo, p.user_id FROM products as p
+        `SELECT p.weight_gram, p.id, p.product_name, c.category_name, p.product_price, p.product_qty, p.product_desc, p.product_photo, p.user_id FROM products as p
             INNER JOIN categories as c ON p.category_id = c.id_categories WHERE id = ${params}`,
         `SELECT * FROM product_sizes as ps INNER JOIN size as s ON s.id = ps.size_id WHERE product_id = ${params}`,
         `SELECT * FROM product_colors as pc INNER JOIN colors as c ON c.id = pc.color_id WHERE product_id = ${params}`,
@@ -94,6 +94,7 @@ module.exports = {
       const bodyProduct = {
         product_name: req.product_name,
         category_id: req.category_id,
+        weight_gram: req.weight_gram,
         condition_id: req.condition_id,
         product_price: req.product_price,
         product_qty: req.product_qty,

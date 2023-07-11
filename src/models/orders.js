@@ -105,8 +105,14 @@ module.exports = {
       total: newTotal,
       user_id: user_id,
       seller_id: body.seller_id,
+      id_store_address: body.id_store_address,
+      courier_code: body.courier_code,
+      courier_type: body.courier_type,
+      courier_price: body.courier_price,
       // level: level
     };
+
+    console.log('bodyOrder',bodyOrder)
 
     return new Promise((resolve, reject) => {
       if (level !== 1) {
@@ -119,13 +125,33 @@ module.exports = {
         db.query(queryString, [bodyOrder], (err, data) => {
           // console.log('anjim ', bodyOrder);
           const queryOrderDetails = "INSERT INTO order_details SET ?";
-          body.item.map((results) => {
+          // body.item.map((results) => {
+          //   const dataOrderDetail = {
+          //     ...results,
+          //     order_id: data.insertId,
+          //   };
+          //   db.query(queryOrderDetails, dataOrderDetail);
+          // });
+          const excludedKeys = ["weight","value","quantity"]; // Array of keys to exclude
+
+          //
+          body.item.forEach((item) => {
+            const filteredItem = Object.keys(item)
+              .filter((key) => !excludedKeys.includes(key))
+              .reduce((obj, key) => {
+                obj[key] = item[key];
+                return obj;
+              }, {});
+            
             const dataOrderDetail = {
-              ...results,
+              ...filteredItem,
               order_id: data.insertId,
             };
+            
             db.query(queryOrderDetails, dataOrderDetail);
           });
+          //
+            
           if (!err) {
             data.total = newTotal
             resolve(data);

@@ -16,17 +16,58 @@ module.exports = {
 
     getAddressByUser: (user_id) => {
         return new Promise((resolve, reject) => {
-            const queryString = "SELECT a.id_address, a.fullname, a.address, a.city, a.region, a.zip_code, a.country, u.id, a.is_active, a.is_primary FROM address_customer AS a JOIN users AS u on u.id = a.id_user WHERE id_user = " + user_id + " order by a.id_address desc";
-            console.log(db.query(queryString, user_id))
-            db.query(queryString, user_id, (err, data) => {
-                if(!err) {
-                    resolve(data)
-                } else {
-                    reject(err)
-                }
-            })
-        })
+          const queryString = `
+            SELECT
+              a.biteship_address_id, a.id_address, a.fullname, a.phone, a.address, a.city, a.region, a.zip_code, a.country, u.id, a.is_active, a.is_primary
+            FROM
+              address_customer AS a
+            JOIN
+              users AS u ON u.id = a.id_user
+            WHERE
+              a.id_user = ?
+            ORDER BY
+              a.id_address DESC;
+          `;
+      
+          db.query(queryString, user_id, (err, data) => {
+            if (err) {
+              reject(err);
+              return;
+            }
+      
+            resolve(data);
+          });
+        });
+      },
+      
+
+    getAddressStore: (user_id) => {
+        return new Promise((resolve, reject) => {
+          const queryString = `
+            SELECT
+              a.biteship_address_id, a.id_address, a.fullname, a.phone, a.address, a.city, a.region,
+              a.zip_code, a.country, u.id, a.is_active, a.is_primary
+            FROM
+              address_customer AS a
+            JOIN
+              users AS u ON u.id = a.id_user
+            WHERE
+              u.level_id = 2 AND a.is_primary = '1' AND a.is_active = '1'
+            ORDER BY
+              a.id_address DESC
+            LIMIT 1;
+          `;
+      
+          db.query(queryString, user_id, (err, data) => {
+            if (!err) {
+              resolve(data);
+            } else {
+              reject(err);
+            }
+          });
+        });
     },
+      
 
     updateAddress: (req, id, user_id) => {
         return new Promise((resolve, reject) => {

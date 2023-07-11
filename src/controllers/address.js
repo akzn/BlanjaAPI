@@ -101,6 +101,17 @@ module.exports = {
         form.error(res, err);
       });
   },
+  getAddressStore: (req, res) => {
+    const user_id = req.decodedToken.id;
+    addressModel
+      .getAddressStore(user_id)
+      .then((data) => {
+        form.success(res, data);
+      })
+      .catch((err) => {
+        form.error(res, err);
+      });
+  },
 
   // getAddressById: (req, res) => {
   //   const user_id = req.decodedToken.id;
