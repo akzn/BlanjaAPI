@@ -125,6 +125,7 @@ module.exports = {
         db.query(queryString, [bodyOrder], (err, data) => {
           // console.log('anjim ', bodyOrder);
           const queryOrderDetails = "INSERT INTO order_details SET ?";
+          const queryDoMinusStock = "UPDATE products set product_qty=product_qty-? where id=?";
           // body.item.map((results) => {
           //   const dataOrderDetail = {
           //     ...results,
@@ -149,6 +150,10 @@ module.exports = {
             };
             
             db.query(queryOrderDetails, dataOrderDetail);
+
+            const dataDoMinusStock = [item.product_qty,item.product_id]
+
+            db.query(queryDoMinusStock,dataDoMinusStock);
           });
           //
             
