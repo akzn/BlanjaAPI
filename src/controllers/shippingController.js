@@ -65,6 +65,12 @@ module.exports = {
         }
     },
 
+    /**
+     * Fetch biteship API shipment data by kode transaksi
+     * @param {*} req 
+     * @param {*} res 
+     * @returns 
+     */
     fetchShipmentByCode: async(req, res) => {
         console.log(req.params)
         transaction_code = req.params.code
@@ -82,6 +88,12 @@ module.exports = {
         
     },
 
+    /**
+     * update tracking number into database
+     * @param {*} req 
+     * @param {*} res 
+     * @returns 
+     */
     insertTrackingNumber: async(req, res) => {
         shippingModel
         .insertTrackingNumber(req.body)
@@ -96,6 +108,12 @@ module.exports = {
         
     },
 
+    /**
+     * Fetch tracking data from biteship
+     * @param {*} req 
+     * @param {*} res 
+     * @returns 
+     */
     fetchTrackingData: async(req,res) => {
         console.log(req.query)
         const tracking_number = req.query.tracking_number
@@ -119,6 +137,12 @@ module.exports = {
         }
     },
 
+    /**
+     * check shipping status
+     * @param {*} req 
+     * @param {*} res 
+     * @returns 
+     */
     checkShippingStatus: async(req,res) => {
         console.log(req.query)
         const tracking_number = req.query.tracking_number
