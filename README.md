@@ -1,19 +1,26 @@
 # Blanja-RESTful-API 
-berisi API sederhana untuk backend saja dibangun dengan node js menggunakan framework express js dan postman untuk testing.
+berisi API sederhana untuk backend saja dibangun dengan node js menggunakan framework express js.
 
+## Installation
+* Clone Repository https://github.com/akzn/BlanjaAPI
+* Ketik `npm install` pada terminal di root directory pada repo untuk install dependencies
+* setelah backend terinstall (`npm install`) dan database sudah selesai diunggah/import, run `knex migrate:latest` pda cli backend untuk melakukan migrasi database ke scheme terbaru. 
+* Payment gateway MIDTRANS
+  - pastikan credential midtrans client sudah diinputkan pada file .env. Jika belum punya akun midtrans, register ke midtrans dan copy server/client secret pada dashboard [SANDBOX](https://dashboard.sandbox.midtrans.com/) midtrans ke .env. Pastikan credential yang dicopy adalah credential sandbox saat melakukan testing
+  - Gunakan [Sanbox testing](https://docs.midtrans.com/en/technical-reference/sandbox-test) untuk testing payment midtrans. 
+* Shipping Service BITESHIP
+  *  sesuaikan secret key Biteship API di `config>biteship api sevice.js
+  *  Sesuaikan konfig `BiteDummy:true` untuk menggunakan dummy data atau `BiteDummy:false` untuk transaksi real/ channel production, karena biteship tidak ada mock tracking pengiriman 
+  *  run `npm start` atau `npm run dev` untuk start server 
 
-## dibangun dengan 
-* npm
-    [Node.js](https://nodejs.org/en/download/)
-* express js = 4.17.1
-```sh
-npm i express
-```
+## Main Dependencies
+* node.js
+* express js 
+* mysql
+* knex
+* midtrans-client
+> dependencies lain bisa dilihat di package.json
 
-* mysql = 2.18.1
-```sh 
-npm i mysql
-```
 
 
 

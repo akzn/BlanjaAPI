@@ -7,8 +7,7 @@
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
-  "repository": "https://github.com/AkbarZul/BlanjaAPI.git",
-  "author": "Akbar Zulfikar <akbrzulfikar98@gmail.com>",
+  "repository": "https://github.com/akzn/BlanjaAPI.git",
   "license": "MIT",
   "dependencies": {
     "bcrypt": "^5.0.0",
