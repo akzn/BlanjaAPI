@@ -23,6 +23,12 @@ berisi API sederhana untuk backend saja dibangun dengan node js menggunakan fram
 > dependencies lain bisa dilihat di package.json
 
 
+## notes about midtrans
+- helper/midtrans.js : digunakan sebagai handler untuk koneksi antara backend ke midtrans API
+- controller/payments.js : disini controller utama untuk segala transaksi midtrans.
+
+## notes about biteship
+- controller/shippingController.js : disini controller utama untuk shipping.
 
 
 ### Endpoint
